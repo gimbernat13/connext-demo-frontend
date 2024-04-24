@@ -23,13 +23,26 @@ function transformData(data) {
   });
   return result;
 }
+function generateRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 function VolumeChart({ data }) {
   const transformedData = transformData(data);
 
-  // Find all unique origin chains to create dynamic bars
-  const originChains = new Set();
-  data.forEach(item => originChains.add(item.origin_chain));
+  // Dynamically collect all unique origin chains
+  const originChains = Array.from(data.reduce((acc, item) => acc.add(item.origin_chain), new Set()));
+
+  // Assign colors dynamically if not predefined
+  const chainColors = originChains.reduce((acc, chain) => {
+    acc[chain] = acc[chain] || generateRandomColor(); // Assign a random color if not already assigned
+    return acc;
+  }, {});
 
   return (
     <div style={{ width: '100%', height: 300 }}>
@@ -48,12 +61,13 @@ function VolumeChart({ data }) {
           <XAxis dataKey="transfer_date" />
           <YAxis />
           <Tooltip formatter={(value, name, props) => [
+            `Chain: ${name}`,
             `Count: ${value}`,
             `Date: ${props.payload.transfer_date}`
           ]}/>
           <Legend />
-          {[...originChains].map(chain => (
-            <Bar key={chain} dataKey={chain} stackId="a" fill="#8884d8" name={chain} />
+          {originChains.map(chain => (
+            <Bar key={chain} dataKey={chain} stackId="a" fill={chainColors[chain]} name={chain} />
           ))}
         </BarChart>
       </ResponsiveContainer>
