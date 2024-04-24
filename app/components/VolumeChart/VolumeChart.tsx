@@ -1,40 +1,37 @@
-"use client"
+// pages/daily-transfers.js
 import React from 'react';
-import { gql } from '@apollo/client';
-import { useQuery } from '@apollo/client';
-import createApolloClient from '@/lib/apolloClient';
 
-
-export const GET_ALL_TRANSFERS = gql`
-query GetAllTransfers {
-  originTransfers(first: 100, orderBy: timestamp, orderDirection: asc, where: {}) {
-    timestamp
-    originDomain
-    bridgedAmt
-  }
-  destinationTransfers(
-    first: 100
-    orderBy: executedTimestamp
-    orderDirection: asc
-  ) {
-    executedTimestamp
-    destinationDomain
-    amount
+export async function getServerSideProps(contex:any) {
+  try {
+    const res = await fetch('https://postgrest.mainnet.connext.ninja/daily_transfer_metrics?transfer_date=gt.2024-03-25');
+    const data = await res.json();
+    console.log(data);
+    return { props: { data } };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return { props: { data: [] } };  // Provide default data as empty array
   }
 }
-`;
 
-const client = createApolloClient();
+function VolumeChart({ data }) {
+  // Log the data to see what you're actually getting
 
-export function TransfersDisplay() {
-  const { loading, error, data } = useQuery(GET_ALL_TRANSFERS, { client });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  console.log("data", data)
+
+  const safeData = Array.isArray(data) ? data : [];
+
   return (
-    <h1>hoal</h1>
+    <div>
+      <h1>Daily Transfer Metrics</h1>
+      <ul>
+        {safeData.map((item, index) => (
+          <li key={index}>
+            Date: {item.transfer_date}, Transfers: {item.transfer_count}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
-export default TransfersDisplay;
+export default VolumeChart;
