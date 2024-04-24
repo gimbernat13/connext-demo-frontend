@@ -1,35 +1,41 @@
-// pages/daily-transfers.js
-import React from 'react';
+"use client"
 
-export async function getServerSideProps(contex:any) {
-  try {
-    const res = await fetch('https://postgrest.mainnet.connext.ninja/daily_transfer_metrics?transfer_date=gt.2024-03-25');
-    const data = await res.json();
-    console.log(data);
-    return { props: { data } };
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return { props: { data: [] } };  // Provide default data as empty array
-  }
-}
+import React from 'react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 
 function VolumeChart({ data }) {
-  // Log the data to see what you're actually getting
-
-
-
-  const safeData = Array.isArray(data) ? data : [];
-
+ 
   return (
-    <div>
+    <div style={{ width: '100%', height: 300 }}>
       <h1>Daily Transfer Metrics</h1>
-      <ul>
-        {safeData.map((item, index) => (
-          <li key={index}>
-            Date: {item.transfer_date}, Transfers: {item.transfer_count}
-          </li>
-        ))}
-      </ul>
+      <ResponsiveContainer>
+        <BarChart
+          width={500}
+          height={300}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <XAxis dataKey="transfer_date" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="transfer_count" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }
