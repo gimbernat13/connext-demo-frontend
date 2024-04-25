@@ -41,7 +41,7 @@ function transformData(data) {
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-gray-700  bg-opacity-75 text-white p-10 rounded-lg shadow-lg relative text-sm">
+      <div className="bg-gray-700  bg-opacity-75 text-white p-4 rounded-lg shadow-lg relative text-sm">
         <div>
           <p className="label mb-1">{label}</p>
           {payload.map((entry, index) => (
@@ -63,7 +63,6 @@ function VolumeChart({ data }) {
 
   return (
     <div style={{ width: '100%', height: 300 }}>
-      <h1 className='p-4 text-lg text-center'>Connext Daily Transfers</h1>
       <ResponsiveContainer>
         <BarChart
           data={transformedData}
