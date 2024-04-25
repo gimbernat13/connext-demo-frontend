@@ -23,8 +23,8 @@ export default function Page({ params }: { params: { date: string } }) {
     <div className="container mx-auto max-w-6xl p-4 my-8 bg-[rgba(0,255,0,0.08)] border-2 border-green-700 rounded-md">
       <div className="flex justify-between items-top">
         <div>
-          <h1 className='text-lg font-bold text-white'>Volume</h1>
-          <p className="text-sm text-gray-400">Transfer volume by day</p>
+          <h1 className='text-lg font-bold text-white'>Total Transfers</h1>
+          <p className="text-sm text-gray-400">Transfer count by day</p>
           <br />
         </div>
         <div className="flex gap-2">
