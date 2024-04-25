@@ -5,7 +5,7 @@ const nextConfig = {
       return [
         {
           source: '/',
-          destination: '/volume/2024-03-26', 
+          destination: '/volume/2024-04-10', 
           permanent: false, 
           statusCode: 307
         }
