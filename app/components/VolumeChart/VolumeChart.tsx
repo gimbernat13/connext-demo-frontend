@@ -1,5 +1,6 @@
 // VolumeChart.js
 "use client"
+
 import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -17,29 +18,32 @@ const chainDetails = {
   '1650553709': { color: '#ec407a', name: 'Base' }
 };
 
-function getChainDetail(chainId, property) {
-  const detail = chainDetails[chainId] || { color: '#d3d3d3', name: 'Unknown' }; // Default color for unknown chains
-  return detail[property];
-}
-
 function transformData(data) {
   const result = [];
-  data.forEach(item => {
+  data.forEach((item) => {
     let entry = result.find(entry => entry.transfer_date === item.transfer_date);
     if (!entry) {
-      entry = { transfer_date: item.transfer_date };
+      entry = { transfer_date: item.transfer_date, chains: {} };
       result.push(entry);
     }
-    entry[item.origin_chain] = (entry[item.origin_chain] || 0) + item.transfer_count;
+    const chainId = item.origin_chain.toString();
+    const chainInfo = chainDetails[chainId] || { color: '#d3d3d3', name: 'Unknown' };
+    
+    if (!entry.chains[chainId]) {
+      entry.chains[chainId] = {
+        count: item.transfer_count,
+        color: chainInfo.color,
+        name: chainInfo.name
+      };
+    } else {
+      entry.chains[chainId].count += item.transfer_count;
+    }
   });
   return result;
 }
 
 function VolumeChart({ data }) {
   const transformedData = transformData(data);
-
-  // Collect all unique origin chains from the data
-  const originChains = Array.from(data.reduce((acc, item) => acc.add(item.origin_chain), new Set()));
 
   return (
     <div style={{ width: '100%', height: 300 }}>
@@ -54,14 +58,14 @@ function VolumeChart({ data }) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="transfer_date" />
           <YAxis />
-          <Tooltip  formatter={(value, name, props) => [
-            `Chain: ${getChainDetail(name, 'name')}`,
+          {/* <Tooltip formatter={(value, name, props) => [
+            `Chain: ${props.payload.chains[name].name}`,
             `Count: ${value}`,
             `Date: ${props.payload.transfer_date}`
-          ]}/>
-          <Legend formatter={(value) => `${getChainDetail(value, 'name')}`} />
-          {originChains.map(chain => (
-            <Bar key={chain} dataKey={chain} stackId="a" fill={getChainDetail(chain, 'color')} name={getChainDetail(chain, 'name')} />
+          ]}/> */}
+          <Legend />
+          {Object.keys(chainDetails).map(chainId => (
+            <Bar key={chainId} dataKey={`chains.${chainId}.count`} stackId="a" fill={chainDetails[chainId].color} name={chainDetails[chainId].name} />
           ))}
         </BarChart>
       </ResponsiveContainer>
