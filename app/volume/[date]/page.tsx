@@ -3,6 +3,7 @@ import Volume from "./volume";
 import Link from "next/link";
 import Image from "next/image";
 import pepe from "../../../public/download.gif";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function Page({ params }: { params: { date: string } }) {
   const formatDate = (date: Date) => {
@@ -20,7 +21,7 @@ export default function Page({ params }: { params: { date: string } }) {
   };
 
   return (
-<div className="container mx-auto max-w-6xl p-4 my-8 bg-[rgba(0,255,0,0.08)] border-2 border-green-700 rounded-md">
+    <div className="container mx-auto max-w-6xl p-4 my-8 bg-[rgba(0,255,0,0.08)] border-2 border-green-700 rounded-md">
       <div className="flex justify-between items-top">
         <div>
           <h1 className='text-lg font-bold text-white'>Volume</h1>
@@ -40,9 +41,11 @@ export default function Page({ params }: { params: { date: string } }) {
 
       <Suspense fallback={
         <div style={{ height: "500px" }} className="flex flex-col justify-center items-center ">
-          <Image height={300} width={300} src={pepe} alt="Loading..." />
-          <p className="text-sm text-white">Loading...</p>
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status">
 
+          </div>
         </div>}>
         <Volume date={params.date} />
       </Suspense>
