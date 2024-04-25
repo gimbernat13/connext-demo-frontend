@@ -1,14 +1,13 @@
 import { Suspense } from "react";
 import Volume from "./volume";
 import Link from "next/link";
-
+import pepe from "../../../public/download.gif"
+import Image from "next/image";
 export default function Page({ params }: { params: { date: string } }) {
-  // Helper function to format the date as YYYY-MM-DD
   const formatDate = (date) => {
     return date.toISOString().split('T')[0];
   }
 
-  // Calculate dates for 7, 15, 30, and 90 days back
   const getDateDaysAgo = (days) => {
     const date = new Date();
     date.setDate(date.getDate() - days);
@@ -17,9 +16,9 @@ export default function Page({ params }: { params: { date: string } }) {
 
   return (
     <>
-      <h1 className='p-4 text-xl text-center'>Connext Daily Transfers</h1>
+      <h1 className='p-4 text-6xl text-center'>Connext Daily Transfers</h1>
 
-      <div className="flex gap-2 my-4">
+      <div className="flex gap-2 my-4 justify-center">
         <Link href={`/volume/${getDateDaysAgo(7)}`}>
           <div className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-sm cursor-pointer">
             7 Days
@@ -42,7 +41,11 @@ export default function Page({ params }: { params: { date: string } }) {
         </Link>
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={
+      <div className="flex flex-col items-center">
+        <p>Fetching your data...</p>
+        <Image src={pepe} alt="Loading..." />
+      </div>}>
         <Volume date={params.date} />
       </Suspense>
     </>
