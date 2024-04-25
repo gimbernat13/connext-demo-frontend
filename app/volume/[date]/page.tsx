@@ -3,7 +3,6 @@ import Volume from "./volume";
 import Link from "next/link";
 import Image from "next/image";
 import pepe from "../../../public/download.gif";
-import ClipLoader from "react-spinners/ClipLoader";
 
 export default function Page({ params }: { params: { date: string } }) {
   const formatDate = (date: Date) => {
@@ -46,6 +45,13 @@ export default function Page({ params }: { params: { date: string } }) {
             role="status">
 
           </div>
+
+          <div style={{ position: "absolute ", bottom: 0, right: 0 , zIndex: -1}}>
+            {/* <p className="text-xs text-white">Loading stuff...</p> */}
+            <Image height={200} width={200} src={pepe} alt="Loading..." />
+          </div>
+
+
         </div>}>
         <Volume date={params.date} />
       </Suspense>
