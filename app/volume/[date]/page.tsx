@@ -39,6 +39,11 @@ export default function Page({ params }: { params: { date: string } }) {
             90 Days
           </div>
         </Link>
+        <Link href={`/volume/${getDateDaysAgo(365)}`}>
+          <div className="bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-sm cursor-pointer">
+            1 year 
+          </div>
+        </Link>
       </div>
 
       <Suspense fallback={
