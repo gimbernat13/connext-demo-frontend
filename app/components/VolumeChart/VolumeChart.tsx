@@ -9,9 +9,9 @@ const chainDetails = {
   '6648936': { color: '#ff6384', name: 'Ethereum' },
   '1886350457': { color: '#36a2eb', name: 'Polygon' },
   '1869640809': { color: '#cc65fe', name: 'Optimism' },
-  '1634886255': { color: '#ffce56', name: 'Arbitrum One' },
-  '6778479': { color: '#4bc0c0', name: 'Gnosis Chain' },
-  '6450786': { color: '#7e57c2', name: 'BNB Chain' },
+  '1634886255': { color: '#ffce56', name: 'Arbitrum ' },
+  '6778479': { color: '#4bc0c0', name: 'Gnosis' },
+  '6450786': { color: '#7e57c2', name: 'BNB' },
   '1818848877': { color: '#42a5f5', name: 'Linea' },
   '1835365481': { color: '#26a69a', name: 'Metis' },
   '1650553709': { color: '#ec407a', name: 'Base' }
@@ -41,13 +41,14 @@ function transformData(data) {
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-gray-700 bg-opacity-75 text-white p-3 rounded-lg shadow-lg relative">
+      <div className="bg-gray-700 bg-opacity-75 text-white p-2 rounded-lg shadow-lg relative text-sm">
         <div className="after:content-[''] after:absolute after:bg-gray-700 after:bg-opacity-75 after:w-3 after:h-3 after:rotate-45 after:-bottom-1.5 after:left-3">
-          <p className="label">{label}</p>
+          <p className="label mb-1">{label}</p>
           {payload.map((entry, index) => (
-            <p key={index} className="intro-y">
-              {entry.name}: {entry.value}
-            </p>
+            <div key={index} className="flex justify-between">
+              <span>{entry.name}:</span>
+              <span className="font-bold">{entry.value}</span>
+            </div>
           ))}
         </div>
       </div>
