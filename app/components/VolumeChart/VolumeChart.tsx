@@ -2,25 +2,25 @@
 
 import React from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps
-} from 'recharts';
+  BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 const chainDetails = {
-  '6648936': { color: '#ff6384', name: 'Ethereum' },
-  '1886350457': { color: '#36a2eb', name: 'Polygon' },
-  '1869640809': { color: '#cc65fe', name: 'Optimism' },
-  '1634886255': { color: '#ffce56', name: 'Arbitrum ' },
-  '6778479': { color: '#4bc0c0', name: 'Gnosis' },
-  '6450786': { color: '#7e57c2', name: 'BNB' },
-  '1818848877': { color: '#42a5f5', name: 'Linea' },
-  '1835365481': { color: '#26a69a', name: 'Metis' },
-  '1650553709': { color: '#ec407a', name: 'Base' }
+  '6648936': { color: "blue", name: 'Ethereum' },
+  '1886350457': { color: '#8247e5', name: 'Polygon' },
+  '1869640809': { color: '#ff0420', name: 'Optimism' },
+  '1634886255': { color: '#28a0f0', name: 'Arbitrum' },
+  '6778479': { color: '#00d395', name: 'Gnosis' },
+  '6450786': { color: '#f3ba2f', name: 'BNB' },
+  '1818848877': { color: 'green', name: 'Linea' },
+  '1835365481': { color: '#0f3057', name: 'Metis' },
+  '1650553709': { color: '#c1d72e', name: 'Base' }
 };
 
 
 
+
 function transformData(data) {
-  const result = [];
+  const result: any[] = [];
   data.forEach(item => {
     let entry = result.find(entry => entry.transfer_date === item.transfer_date);
     if (!entry) {
@@ -41,8 +41,8 @@ function transformData(data) {
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-gray-700 bg-opacity-75 text-white p-2 rounded-lg shadow-lg relative text-sm">
-        <div className="after:content-[''] after:absolute after:bg-gray-700 after:bg-opacity-75 after:w-3 after:h-3 after:rotate-45 after:-bottom-1.5 after:left-3">
+      <div className="bg-gray-700  bg-opacity-75 text-white p-10 rounded-lg shadow-lg relative text-sm">
+        <div>
           <p className="label mb-1">{label}</p>
           {payload.map((entry, index) => (
             <div key={index} className="flex justify-between">
@@ -63,7 +63,7 @@ function VolumeChart({ data }) {
 
   return (
     <div style={{ width: '100%', height: 300 }}>
-      <h1>Daily Transfers</h1>
+      <h1 className='p-4 text-lg text-center'>Connext Daily Transfers</h1>
       <ResponsiveContainer>
         <BarChart
           data={transformedData}
