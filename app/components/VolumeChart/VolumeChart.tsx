@@ -1,9 +1,8 @@
-// VolumeChart.js
 "use client"
 
 import React from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps
 } from 'recharts';
 
 const chainDetails = {
@@ -18,26 +17,36 @@ const chainDetails = {
   '1650553709': { color: '#ec407a', name: 'Base' }
 };
 
+function CustomTooltip({ active, payload, label }: TooltipProps<number, string>) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-gray-700 bg-opacity-75 text-white text-xs p-2 rounded">
+        <p>{`Date: ${label}`}</p>
+        <p>{`Chain: ${payload[0].name || 'Unknown Chain'}`}</p>
+        <p>{`Count: ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 function transformData(data) {
   const result = [];
-  data.forEach((item) => {
+  data.forEach(item => {
     let entry = result.find(entry => entry.transfer_date === item.transfer_date);
     if (!entry) {
       entry = { transfer_date: item.transfer_date, chains: {} };
+      Object.keys(chainDetails).forEach(chainId => {
+        entry.chains[chainId] = { count: 0, color: chainDetails[chainId].color, name: chainDetails[chainId].name };
+      });
       result.push(entry);
     }
-    const chainId = item.origin_chain.toString();
-    const chainInfo = chainDetails[chainId] || { color: '#d3d3d3', name: 'Unknown' };
-    
-    if (!entry.chains[chainId]) {
-      entry.chains[chainId] = {
-        count: item.transfer_count,
-        color: chainInfo.color,
-        name: chainInfo.name
-      };
-    } else {
-      entry.chains[chainId].count += item.transfer_count;
+    if (!entry.chains[item.origin_chain]) {
+      const chainInfo = chainDetails[item.origin_chain] || { color: '#d3d3d3', name: 'Unknown' };
+      entry.chains[item.origin_chain] = { count: 0, color: chainInfo.color, name: chainInfo.name };
     }
+    entry.chains[item.origin_chain].count += item.transfer_count;
   });
   return result;
 }
@@ -58,13 +67,10 @@ function VolumeChart({ data }) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="transfer_date" />
           <YAxis />
-          {/* <Tooltip formatter={(value, name, props) => [
-            `Chain: ${props.payload.chains[name].name}`,
-            `Count: ${value}`,
-            `Date: ${props.payload.transfer_date}`
-          ]}/> */}
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
           {Object.keys(chainDetails).map(chainId => (
+            transformedData.some(data => data.chains[chainId].count > 0) && 
             <Bar key={chainId} dataKey={`chains.${chainId}.count`} stackId="a" fill={chainDetails[chainId].color} name={chainDetails[chainId].name} />
           ))}
         </BarChart>
