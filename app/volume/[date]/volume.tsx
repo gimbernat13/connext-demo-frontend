@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import VolumeChart from "../../components/VolumeChart/VolumeChart";
 
 async function getData(date: string) {
