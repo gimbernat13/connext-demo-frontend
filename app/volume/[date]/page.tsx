@@ -16,7 +16,7 @@ export default function Page({ params }: { params: { date: string } }) {
 
   return (
     <>
-      <h1 className='p-4 text-6xl text-center'>Connext Daily Transfers</h1>
+      <h1 className='p-4 text-4xl text-center'>Connext Daily Transfers</h1>
 
       <div className="flex gap-2 my-4 justify-center">
         <Link href={`/volume/${getDateDaysAgo(7)}`}>
