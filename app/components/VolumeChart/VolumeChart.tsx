@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 
 const chainDetails = {
-  '6648936': { color: '#ff6384', name: 'Ethereum Mainnet' },
+  '6648936': { color: '#ff6384', name: 'Ethereum' },
   '1886350457': { color: '#36a2eb', name: 'Polygon' },
   '1869640809': { color: '#cc65fe', name: 'Optimism' },
   '1634886255': { color: '#ffce56', name: 'Arbitrum One' },
@@ -17,19 +17,7 @@ const chainDetails = {
   '1650553709': { color: '#ec407a', name: 'Base' }
 };
 
-function CustomTooltip({ active, payload, label }: TooltipProps<number, string>) {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-gray-700 bg-opacity-75 text-white text-xs p-2 rounded">
-        <p>{`Date: ${label}`}</p>
-        <p>{`Chain: ${payload[0].name || 'Unknown Chain'}`}</p>
-        <p>{`Count: ${payload[0].value}`}</p>
-      </div>
-    );
-  }
 
-  return null;
-}
 
 function transformData(data) {
   const result = [];
@@ -50,13 +38,31 @@ function transformData(data) {
   });
   return result;
 }
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-gray-700 bg-opacity-75 text-white p-3 rounded-lg shadow-lg relative">
+        <div className="after:content-[''] after:absolute after:bg-gray-700 after:bg-opacity-75 after:w-3 after:h-3 after:rotate-45 after:-bottom-1.5 after:left-3">
+          <p className="label">{label}</p>
+          {payload.map((entry, index) => (
+            <p key={index} className="intro-y">
+              {entry.name}: {entry.value}
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};
 
 function VolumeChart({ data }) {
   const transformedData = transformData(data);
 
   return (
     <div style={{ width: '100%', height: 300 }}>
-      <h1>Daily Transfer Metrics</h1>
+      <h1>Daily Transfers</h1>
       <ResponsiveContainer>
         <BarChart
           data={transformedData}
@@ -64,13 +70,12 @@ function VolumeChart({ data }) {
             top: 20, right: 30, left: 20, bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="transfer_date" />
           <YAxis />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           {Object.keys(chainDetails).map(chainId => (
-            transformedData.some(data => data.chains[chainId].count > 0) && 
+            transformedData.some(data => data.chains[chainId].count > 0) &&
             <Bar key={chainId} dataKey={`chains.${chainId}.count`} stackId="a" fill={chainDetails[chainId].color} name={chainDetails[chainId].name} />
           ))}
         </BarChart>

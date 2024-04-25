@@ -1,7 +1,7 @@
 import VolumeChart from "../components/VolumeChart/VolumeChart";
 
 async function getData() {
-    const res = await fetch('https://postgrest.mainnet.connext.ninja/daily_transfer_metrics?transfer_date=gt.2024-03-25');
+    const res = await fetch('https://postgrest.mainnet.connext.ninja/daily_transfer_metrics?transfer_date=gt.2024-01-25');
     if (!res.ok) {
         throw new Error('Failed to fetch data');
     }
