@@ -1,16 +1,27 @@
+// VolumeChart.js
 "use client"
-
 import React from 'react';
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
+
+const chainDetails = {
+  '6648936': { color: '#ff6384', name: 'Ethereum Mainnet' },
+  '1886350457': { color: '#36a2eb', name: 'Polygon' },
+  '1869640809': { color: '#cc65fe', name: 'Optimism' },
+  '1634886255': { color: '#ffce56', name: 'Arbitrum One' },
+  '6778479': { color: '#4bc0c0', name: 'Gnosis Chain' },
+  '6450786': { color: '#7e57c2', name: 'BNB Chain' },
+  '1818848877': { color: '#42a5f5', name: 'Linea' },
+  '1835365481': { color: '#26a69a', name: 'Metis' },
+  '1650553709': { color: '#ec407a', name: 'Base' }
+};
+
+function getChainDetail(chainId, property) {
+  const detail = chainDetails[chainId] || { color: '#d3d3d3', name: 'Unknown' }; // Default color for unknown chains
+  return detail[property];
+}
+
 function transformData(data) {
   const result = [];
   data.forEach(item => {
@@ -23,26 +34,12 @@ function transformData(data) {
   });
   return result;
 }
-function generateRandomColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
 
 function VolumeChart({ data }) {
   const transformedData = transformData(data);
 
-  // Dynamically collect all unique origin chains
+  // Collect all unique origin chains from the data
   const originChains = Array.from(data.reduce((acc, item) => acc.add(item.origin_chain), new Set()));
-
-  // Assign colors dynamically if not predefined
-  const chainColors = originChains.reduce((acc, chain) => {
-    acc[chain] = acc[chain] || generateRandomColor(); // Assign a random color if not already assigned
-    return acc;
-  }, {});
 
   return (
     <div style={{ width: '100%', height: 300 }}>
@@ -51,23 +48,20 @@ function VolumeChart({ data }) {
         <BarChart
           data={transformedData}
           margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
+            top: 20, right: 30, left: 20, bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="transfer_date" />
           <YAxis />
-          <Tooltip formatter={(value, name, props) => [
-            `Chain: ${name}`,
+          <Tooltip  formatter={(value, name, props) => [
+            `Chain: ${getChainDetail(name, 'name')}`,
             `Count: ${value}`,
             `Date: ${props.payload.transfer_date}`
           ]}/>
-          <Legend />
+          <Legend formatter={(value) => `${getChainDetail(value, 'name')}`} />
           {originChains.map(chain => (
-            <Bar key={chain} dataKey={chain} stackId="a" fill={chainColors[chain]} name={chain} />
+            <Bar key={chain} dataKey={chain} stackId="a" fill={getChainDetail(chain, 'color')} name={getChainDetail(chain, 'name')} />
           ))}
         </BarChart>
       </ResponsiveContainer>
