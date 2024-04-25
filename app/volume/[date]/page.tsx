@@ -43,7 +43,7 @@ export default function Page({ params }: { params: { date: string } }) {
 
       <Suspense fallback={
       <div className="flex flex-col items-center">
-        <p>Fetching your data...</p>
+        <p>Fetching Data...</p>
         <Image src={pepe} alt="Loading..." />
       </div>}>
         <Volume date={params.date} />
