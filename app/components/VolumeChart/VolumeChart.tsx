@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 "use client"
 
 import React from 'react';
@@ -61,7 +60,7 @@ function VolumeChart({ data }) {
         >
           <XAxis dataKey="transfer_date" />
           <YAxis />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip cursor={{ fill: 'transparent' }} content={<CustomTooltip />} />
           <Legend />
           {Object.keys(chainDetails).map(chainId => (
             transformedData.some(data => data.chains[chainId].count > 0) &&
