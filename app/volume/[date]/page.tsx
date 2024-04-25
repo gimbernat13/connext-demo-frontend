@@ -4,11 +4,11 @@ import Link from "next/link";
 import pepe from "../../../public/download.gif"
 import Image from "next/image";
 export default function Page({ params }: { params: { date: string } }) {
-  const formatDate = (date) => {
+  const formatDate = (date : Date) => {
     return date.toISOString().split('T')[0];
   }
 
-  const getDateDaysAgo = (days) => {
+  const getDateDaysAgo = (days : number) => {
     const date = new Date();
     date.setDate(date.getDate() - days);
     return formatDate(date);

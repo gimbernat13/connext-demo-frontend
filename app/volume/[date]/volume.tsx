@@ -12,9 +12,6 @@ const res = await fetch(`https://postgrest.mainnet.connext.ninja/daily_transfer_
 export default async function Volume({ date }) {
   const data = await getData(date);
 
-  console.log("date" , date)
-  console.log("dataa" , data)
-
 
   return (
     <main>
