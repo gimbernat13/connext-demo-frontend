@@ -22,11 +22,15 @@ export default function Page({ params }: { params: { date: string } }) {
   return (
     <div className="container mx-auto max-w-6xl p-4 bg-black">
       <div className="flex justify-between items-center my-4">
-        <h1 className='text-lg p-4'>Connext Daily Transfers</h1>
-        <div className="flex gap-2 p-4">
+        <div>
+          <h1 className='text-lg font-bold text-white'>Volume</h1>
+          <p className="text-gray-400">Transfer volume by day</p>
+        </div>
+
+        <div className="flex gap-2">
           {[7, 15, 30, 90, 365, 600].map((days) => (
             <Link href={`/volume/${getDateDaysAgo(days)}`} key={days}>
-              <div className={`bg-gray-800 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-sm cursor-pointer ${isActive(days) ? "ring-2 ring-white" : ""}`}>
+              <div className={`text-xs bg-gray-800 hover:bg-gray-700 text-white font-medium py-1 px-3 rounded cursor-pointer ${isActive(days) ? "ring-2 ring-white" : ""}`}>
                 {days} Days
               </div>
             </Link>
@@ -35,10 +39,10 @@ export default function Page({ params }: { params: { date: string } }) {
       </div>
 
       <Suspense fallback={
-      <div className="flex flex-col items-center">
-        <p>Fetching Data...</p>
-        <Image src={pepe} alt="Loading..." />
-      </div>}>
+        <div style={{ height: "500px" }} className="flex flex-col justify-center items-center ">
+          <Image height={300} src={pepe} alt="Loading..." />
+          {/* <p className="text-white">Loading...</p> */}
+        </div>}>
         <Volume date={params.date} />
       </Suspense>
     </div>
